@@ -52,10 +52,12 @@ def get_username(strategy, details, backend, user=None, *args, **kwargs):
         # as base but adding a unique hash at the end. Original
         # username is cut to avoid any field max_length.
         # The final_username may be empty and will skip the loop.
-        while not final_username or \
-              storage.user.user_exists(username=final_username):
-            username = short_username + uuid4().hex[:uuid_length]
-            final_username = slug_func(clean_func(username[:max_length]))
+        # while not final_username or \
+        #       storage.user.user_exists(username=final_username):
+        #     username = short_username + uuid4().hex[:uuid_length]
+        #     final_username = slug_func(clean_func(username[:max_length]))
+        if storage.user.user_exists(username=final_username):
+            return {'username': final_username}
     else:
         final_username = storage.user.get_username(user)
     return {'username': final_username}
